@@ -1,0 +1,14 @@
+.idea/
+.vscode/
+.svn/
+appdata
+.history/
+update.zip
+.git/
+.config/
+**/polaris/log
+vendor/**/.code.yml
+**/__debug_bin
+.fib
+/vendor
+/live_logic

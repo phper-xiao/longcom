@@ -1,0 +1,73 @@
+branch:
+    trunk_name: master
+    branch_type_A:
+        personal_feature:
+            pattern: feature/${userID}_${storyID}
+        bugfix:
+            pattern: bugfix/${userID}_${bugID}
+        tag:
+            pattern: v${versionnumber}[${releasetype}[_${description}]{_yyyyMMddHHmm}]
+            versionnumber: versionnumber={Major-version}.{Feature-version}.{Fix-version}.{BuildNo}
+artifact:
+    - path: /
+      artifact_name: svip/longcom
+      artifact_type: 后台微服务
+      main_source_language:
+          - Golang
+      repository_url: https://mirrors.tencent.com/repository/rpm/pcg_rpm/x86_64/
+      dependence_conf: go.mod
+source:
+    test_source:
+        filepath_regex:
+            - _test.go$
+            - ./test/.*
+            - services/.*_test.go$
+            - logics/.*_test.go$
+    auto_generate_source:
+        filepath_regex:
+            - .*.pb.go
+            - .*.trpc.go$
+            - .*_mock.go$
+            - ./stub/.*
+            - ./models/.*
+    third_party_source:
+        filepath_regex:
+            - ./vendor/.*
+            - ./third_party/.*
+code_review:
+    restrict_labels:
+        - CR-编程规范
+        - CR-业务逻辑
+        - CR-边界逻辑
+        - CR-代码架构
+        - CR-性能影响
+        - CR-安全性
+        - CR-可测试性
+        - CR-可读性
+    reviewers:
+        - ekopei
+        - kevinwxyang
+        - jaycezhou
+        - alexfhyao
+    necessary_reviewers:
+        - ekopei
+        - kevinwxyang
+        - jaycezhou
+        - alexfhyao
+file:
+    - path: /.*
+      owners:
+          - ekopei
+          - kevinwxyang
+      code_review:
+          reviewers:
+              - ekopei
+              - kevinwxyang
+              - jaycezhou
+              - alexfhyao
+          necessary_reviewers:
+              - ekopei
+              - kevinwxyang
+              - jaycezhou
+              - alexfhyao
+      owner_rule: 0

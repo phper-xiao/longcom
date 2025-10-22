@@ -1,0 +1,53 @@
+env = "development"
+jwt_secret="4j2dtns80wpm96qa"
+tcp_address = "0.0.0.0:9799"
+topic_push_pool = 10000
+
+[mq_config]
+    [mq_config.PushByAliasTopicConsumerConfig]
+    BrokerAddr="11.180.184.9:9092"
+    Partitioner="RoundRobin"
+    MaxRetry=3
+    KeepAlive=3000
+    SASLEnable=false
+    Topic="push_alias_topic_longcom"
+
+    [mq_config.PushAllTopicConsumerConfig]
+    BrokerAddr="11.180.184.9:9092"
+    Partitioner="RoundRobin"
+    MaxRetry=3
+    KeepAlive=3000
+    SASLEnable=false
+    Topic="push_topic_topic_longcom"
+
+    [mq_config.PushByTopicTopicConsumerConfig]
+    BrokerAddr="11.180.184.9:9092"
+    Partitioner="RoundRobin"
+    MaxRetry=3
+    KeepAlive=3000
+    SASLEnable=false
+    Topic="push_all_topic_longcom"
+
+    [mq_config.PushByAliasTopicProducerConfig]
+    ClientID= "longcom"
+    BrokerAddr="11.180.184.9:9092"
+    Partitioner="RoundRobin"
+    MaxRetry=3
+    KeepAlive=3000
+    SASLEnable=false
+
+    [mq_config.PushAllTopicProducerConfig]
+    ClientID= "longcom"
+    BrokerAddr="11.180.184.9:9092"
+    Partitioner="RoundRobin"
+    MaxRetry=3
+    KeepAlive=3000
+    SASLEnable=false
+
+    [mq_config.PushByTopicTopicProducerConfig]
+    ClientID= "longcom"
+    BrokerAddr="11.180.184.9:9092"
+    Partitioner="RoundRobin"
+    MaxRetry=3
+    KeepAlive=3000
+    SASLEnable=false

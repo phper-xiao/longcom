@@ -1,0 +1,13 @@
+env = "development"
+
+[redis_ws]
+    [redis_ws.development]
+    host="9.134.42.201"
+    port="6380"
+    password="2VR5dXuh"
+    maxIdle=100
+    maxOpen=1000
+    connect_timeout=5
+    read_timeout=5
+    write_timeout=5
+    idle_timeout=300

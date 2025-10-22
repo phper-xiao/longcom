@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package trpc.svip.longcom;
+option go_package = "git.code.oa.com/up-common/rpcprotocols/svip_longcom";
+
+import "validate.proto";
+
+service LongCom {
+  // 获取长连接token, 业务调用
+  rpc GetToken(GetTokenRequest) returns (GetTokenResponse) {}
+  // 建立长链接, C端网关调用
+  rpc Connect(ConnectRequest) returns (ConnectResponse) {}
+  // 发送长连接消息, 内部自调用
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse) {}
+  // 给用户的所有连接发送消息, 业务调用
+  rpc SendMessageByUser(SendMessageByUserRequest) returns (SendMessageByUserResponse) {}
+  // 给Topic的所有用户连接发送消息, 业务调用
+  rpc SendMessageByTopic(SendMessageByTopicRequest) returns (SendMessageByTopicResponse) {}
+  // 查询用户当前连接状态, 业务调用
+  rpc GetUserState(GetUserStateRequest) returns (GetUserStateResponse) {}
+  // 获取用户在线列表及在线总数, 业务调用
+  rpc GetOnlineUsers(GetOnlineUsersRequest) returns (GetOnlineUsersResponse) {}
+}
+
+message GetTokenRequest {
+  string app_name     = 1 [(validate.rules).string.min_len = 1];  // appname, 区分业务
+  string topic        = 2;                                        // topic， 区分用户分组
+  string user_id      = 3 [(validate.rules).string.min_len = 5];  // 用户标识, 可自定义字符串, 也可用qq/commid
+  string callback_url = 4;                                        // 回调地址, 用于接收长连接上行的事件消息
+}
+
+message GetTokenResponse {
+  string token = 1;  // token用于创建长连接时使用
+}
+
+message ConnectRequest {
+  string token = 1 [(validate.rules).string.min_len = 6];  // 长连接token
+}
+
+message ConnectResponse {
+  string conn_id = 1;  // 长连接ID, 默认返回在header中的ws_id字段
+}
+
+message SendMessageRequest {
+  string conn_id = 1;  // 长连接ID
+  string message = 2;  // 消息内容
+}
+
+message SendMessageResponse {
+}
+
+message SendMessageByUserRequest {
+  string app_name = 1 [(validate.rules).string.min_len = 1];  // appname, 区分业务
+  string topic    = 2;                                        // topic， 区分用户分组
+  string user_id  = 3 [(validate.rules).string.min_len = 5];  // 用户标识, 可自定义字符串, 也可用qq/commid
+  string message  = 4;                                        // 消息内容
+}
+
+message SendMessageByUserResponse {
+}
+
+message SendMessageByTopicRequest {
+  string app_name = 1 [(validate.rules).string.min_len = 1];  // appname, 目的是为了区分不同应用的连接，避免用用户重复
+  string topic    = 2;                                        // topic分组
+  bytes message  = 4;                                        // 消息内容
+}
+
+message SendMessageByTopicResponse {
+}
+
+message CloseRequest {
+  string conn_id = 1;  // 长连接ID
+}
+
+message CloseResponse {
+}
+
+message GetUserStateRequest {
+  string app_name = 1 [(validate.rules).string.min_len = 1];  // appname, 目的是为了区分不同应用的连接，避免用用户重复
+  string topic    = 2;                                        // topic分组
+  string user_id  = 3;                                        // 用户标识, 可自定义字符串, 也可用qq/commid等
+}
+
+message GetUserStateResponse {
+  string conn_id         = 1;  // 长连接ID
+  bool   closed          = 2;  // 连接是否关闭
+  string node            = 3;  // 服务器节点
+  int64  connect_time    = 4;  // 连接时间
+  int64  disconnect_time = 5;  // 关闭时间
+}
+
+message GetOnlineUsersRequest {
+  string app_name  = 1 [(validate.rules).string.min_len = 1];  // appname, 目的是为了区分不同应用的连接，避免用用户重复
+  string topic     = 2;                                        // topic分组
+  int64  page      = 3;
+  int64  page_size = 4;
+}
+
+message GetOnlineUsersResponse {
+  repeated string users = 1;
+  int64           count = 2;  // 总数
+}
