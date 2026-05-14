@@ -11,7 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/panjf2000/gnet"
 	"github.com/pkg/errors"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 	"github.com/tylerxiao/longcom/repo/merrors"
 	"github.com/tylerxiao/longcom/repo/message"
 	"go.uber.org/atomic"

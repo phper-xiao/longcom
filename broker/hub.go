@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 	"go.uber.org/atomic"
 )
 

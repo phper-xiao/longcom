@@ -4,8 +4,8 @@ import (
     "context"
     "time"
 
-    "github.com/trpc-group/trpc-go/log"
     "github.com/panjf2000/gnet"
+    "trpc.group/trpc-go/trpc-go/log"
 )
 
 // OnInitComplete gnet 库 OnInitComplete 接口的实现

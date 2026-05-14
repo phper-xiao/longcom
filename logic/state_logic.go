@@ -25,13 +25,13 @@ const (
 func GetUserState(appName, topic, userID string) (UserState, error) {
 	key := fmt.Sprintf(cacheKeyState, appName, topic, userID)
 	// 拿到redis链接
+	var ret UserState
 	rd, err := redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
 		return ret, err
 	}
 	defer rd.Close()
 
-	var ret UserState
 	reply, err := rd.Do("hGetAll", key)
 	if err != nil {
 		return ret, err

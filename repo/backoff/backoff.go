@@ -2,11 +2,11 @@
 package backoff
 
 import (
-    "context"
-    "time"
+	"context"
+	"time"
 
-    "github.com/trpc-group/trpc-go/log"
-    "github.com/cenkalti/backoff/v4"
+	"trpc.group/trpc-go/trpc-go/log"
+	"github.com/cenkalti/backoff/v4"
 )
 
 // Retry 报错时重试，使用指数退避算法的重试

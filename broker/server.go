@@ -6,18 +6,18 @@ import (
 	"sync/atomic"
 	"time"
 
-    "github.com/tylerxiao/longcom/config"
-    "github.com/tylerxiao/longcom/repo/merrors"
-    "github.com/tylerxiao/longcom/repo/metrics"
-    "github.com/tylerxiao/longcom/repo/mq"
-    "github.com/tylerxiao/longcom/repo/mq/kafka"
-    "github.com/tylerxiao/longcom/repo/wrapper"
-	longcom "git.code.oa.com/up-common/rpcprotocol/svip_longcom"
 	"github.com/google/uuid"
 	"github.com/panjf2000/gnet"
 	"github.com/pkg/errors"
-	"github.com/trpc-group/trpc-go/log"
-	"github.com/trpc-group/trpc-go/server"
+	"github.com/tylerxiao/longcom/config"
+	longcom "github.com/tylerxiao/longcom/protocols"
+	"github.com/tylerxiao/longcom/repo/merrors"
+	"github.com/tylerxiao/longcom/repo/metrics"
+	"github.com/tylerxiao/longcom/repo/mq"
+	"github.com/tylerxiao/longcom/repo/mq/kafka"
+	"github.com/tylerxiao/longcom/repo/wrapper"
+	"trpc.group/trpc-go/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/server"
 )
 
 // Server that backs the broker.
@@ -141,10 +141,7 @@ func (s *Server) Start() error {
 
 	s.waitGroup.Wrap(func() {
 		exitFunc(func() error {
-			longcom.RegisterLongComService(s.trpcServer, &Server{
-				messageQueue: s.messageQueue,
-				tcpAddress:   s.tcpAddress,
-			})
+			longcom.RegisterLongComService(s.trpcServer, s)
 			err := s.trpcServer.Serve()
 			if err != nil {
 				return errors.WithStack(err)
@@ -211,6 +208,7 @@ func (s *Server) AddAuthedConnection(
 		log.ErrorContextf(ctx, "AddAuthedConnection|getGroupManager failed, err: %v", err)
 		return errors.WithStack(err)
 	}
+	s.connectionIDToConnMap.Store(session.ConnectionID, conn)
 	// 连接 alias -> conn
 	gm.addAliasConn(ctx, session.Business, s.NodeID(), session.Alias, conn, topic)
 	gm.addConn(ctx, session.ConnectionID, conn)
@@ -226,7 +224,7 @@ func (s *Server) RemoveAuthedConnection(
 	session *ConnectionSession,
 	conn *Conn,
 ) error {
-	// s.connectionIDToConnMap.Delete(session.ConnectionID)
+	s.connectionIDToConnMap.Delete(session.ConnectionID)
 	// 获取对应业务的 group manager
 	gm, err := s.bgm.getGroupManager(ctx, session.Business)
 	if err != nil {

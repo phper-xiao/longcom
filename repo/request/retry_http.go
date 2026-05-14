@@ -7,7 +7,7 @@ import (
 	"time"
 
 	retryablehttp "github.com/hashicorp/go-retryablehttp"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 )
 
 const (

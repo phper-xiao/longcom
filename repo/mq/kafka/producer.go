@@ -6,7 +6,7 @@ import (
 
 	"github.com/Shopify/sarama"
 	"github.com/pkg/errors"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 )
 
 // KafkaProducerConfig kafka 生产者配置

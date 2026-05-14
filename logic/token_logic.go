@@ -7,7 +7,7 @@ import (
 
     "github.com/tylerxiao/longcom/config"
 	"github.com/dgrijalva/jwt-go/v4"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 	"go.uber.org/zap"
 )
 

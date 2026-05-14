@@ -27,7 +27,7 @@ import (
     "github.com/tylerxiao/longcom/repo/ws/wsutil"
 	"github.com/gorilla/websocket"
 	"github.com/panjf2000/gnet"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 )
 
 // websocketConn represents a connection of websocket.

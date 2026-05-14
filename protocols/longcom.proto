@@ -1,9 +1,7 @@
 syntax = "proto3";
 
 package trpc.svip.longcom;
-option go_package = "git.code.oa.com/up-common/rpcprotocols/svip_longcom";
-
-import "validate.proto";
+option go_package = "github.com/tylerxiao/longcom/protocols";
 
 service LongCom {
   // 获取长连接token, 业务调用
@@ -23,9 +21,9 @@ service LongCom {
 }
 
 message GetTokenRequest {
-  string app_name     = 1 [(validate.rules).string.min_len = 1];  // appname, 区分业务
+  string app_name     = 1;  // appname, 区分业务
   string topic        = 2;                                        // topic， 区分用户分组
-  string user_id      = 3 [(validate.rules).string.min_len = 5];  // 用户标识, 可自定义字符串, 也可用qq/commid
+  string user_id      = 3;  // 用户标识, 可自定义字符串, 也可用qq/commid
   string callback_url = 4;                                        // 回调地址, 用于接收长连接上行的事件消息
 }
 
@@ -34,7 +32,7 @@ message GetTokenResponse {
 }
 
 message ConnectRequest {
-  string token = 1 [(validate.rules).string.min_len = 6];  // 长连接token
+  string token = 1;  // 长连接token
 }
 
 message ConnectResponse {
@@ -50,9 +48,9 @@ message SendMessageResponse {
 }
 
 message SendMessageByUserRequest {
-  string app_name = 1 [(validate.rules).string.min_len = 1];  // appname, 区分业务
+  string app_name = 1;  // appname, 区分业务
   string topic    = 2;                                        // topic， 区分用户分组
-  string user_id  = 3 [(validate.rules).string.min_len = 5];  // 用户标识, 可自定义字符串, 也可用qq/commid
+  string user_id  = 3;  // 用户标识, 可自定义字符串, 也可用qq/commid
   string message  = 4;                                        // 消息内容
 }
 
@@ -60,7 +58,7 @@ message SendMessageByUserResponse {
 }
 
 message SendMessageByTopicRequest {
-  string app_name = 1 [(validate.rules).string.min_len = 1];  // appname, 目的是为了区分不同应用的连接，避免用用户重复
+  string app_name = 1;  // appname, 目的是为了区分不同应用的连接，避免用用户重复
   string topic    = 2;                                        // topic分组
   bytes message  = 4;                                        // 消息内容
 }
@@ -76,7 +74,7 @@ message CloseResponse {
 }
 
 message GetUserStateRequest {
-  string app_name = 1 [(validate.rules).string.min_len = 1];  // appname, 目的是为了区分不同应用的连接，避免用用户重复
+  string app_name = 1;  // appname, 目的是为了区分不同应用的连接，避免用用户重复
   string topic    = 2;                                        // topic分组
   string user_id  = 3;                                        // 用户标识, 可自定义字符串, 也可用qq/commid等
 }
@@ -90,7 +88,7 @@ message GetUserStateResponse {
 }
 
 message GetOnlineUsersRequest {
-  string app_name  = 1 [(validate.rules).string.min_len = 1];  // appname, 目的是为了区分不同应用的连接，避免用用户重复
+  string app_name  = 1;  // appname, 目的是为了区分不同应用的连接，避免用用户重复
   string topic     = 2;                                        // topic分组
   int64  page      = 3;
   int64  page_size = 4;

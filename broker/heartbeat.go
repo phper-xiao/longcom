@@ -6,8 +6,8 @@ import (
     "sync"
     "time"
 
-    "github.com/trpc-group/trpc-go/log"
     "github.com/pkg/errors"
+    "trpc.group/trpc-go/trpc-go/log"
 )
 
 // 修改于 https://golang.org/pkg/container/heap/ 的 priority queue

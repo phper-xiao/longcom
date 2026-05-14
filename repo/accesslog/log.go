@@ -6,9 +6,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/trpc-group/trpc-go/codec"
-	"github.com/trpc-group/trpc-go/filter"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/codec"
+	"trpc.group/trpc-go/trpc-go/filter"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -20,8 +19,12 @@ const (
 
 type filterType int
 
+var logger, _ = zap.NewProduction()
+
+type traceIDKey struct{}
+
 func init() {
-	filter.Register(PluginName, ServerFilter(), ClientFilter())
+	filter.Register("accesslog", ServerFilter(), ClientFilter())
 }
 
 // ServerFilter 打印服务端日志
@@ -70,7 +73,7 @@ func ServerFilter() filter.ServerFilter {
 			zap.Int64("cost_ms", cost),
 			zap.ByteString("rsp", rspData),
 			zap.Any("meta", metaDataWithStringValue),
-			zap.String(log.TID, traceID),
+			zap.String("tid", traceID),
 		}
 
 		if len(reqData) < 1000 {
@@ -79,10 +82,10 @@ func ServerFilter() filter.ServerFilter {
 
 		if err != nil {
 			zapFields = append(zapFields, zap.Error(err))
-			log.Error("access_log", zapFields...)
+			logger.Error("access_log", zapFields...)
 			return
 		}
-		log.Info("access_log", zapFields...)
+		logger.Info("access_log", zapFields...)
 		return
 	}
 }
@@ -130,25 +133,25 @@ func ClientFilter() filter.ClientFilter {
 			zap.ByteString("req", reqData),
 			zap.ByteString("rsp", rspData),
 			zap.Any("meta", metaDataWithStringValue),
-			zap.String(log.TID, traceID),
+			zap.String("tid", traceID),
 		}
 		if err != nil {
 			zapFields = append(zapFields, zap.Error(err))
-			log.Error("rpc_log", zapFields...)
+			logger.Error("rpc_log", zapFields...)
 			return
 		}
-		log.Info("rpc_log", zapFields...)
+		logger.Info("rpc_log", zapFields...)
 		return
 	}
 }
 
 func getTraceID(ctx context.Context) (context.Context, string) {
 	var traceID string
-	if traceID, ok := ctx.Value(log.KeyTraceID).(string); ok {
+	if traceID, ok := ctx.Value(traceIDKey{}).(string); ok {
 		return ctx, traceID
 	}
 
 	traceID = uuid.New().String()
-	ctx = context.WithValue(ctx, log.KeyTraceID, traceID)
+	ctx = context.WithValue(ctx, traceIDKey{}, traceID)
 	return ctx, traceID
 }

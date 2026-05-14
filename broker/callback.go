@@ -7,12 +7,10 @@ import (
 	"net/url"
 	"time"
 
-    "github.com/tylerxiao/longcom/repo/request"
-	pb "git.code.oa.com/up-common/rpcprotocol/svip_longcom"
 	"github.com/pquerna/ffjson/ffjson"
-	"github.com/trpc-group/trpc-go/log"
-	"google.golang.org/protobuf/proto"
-	"google.golang.org/protobuf/types/known/anypb"
+	pb "github.com/tylerxiao/longcom/protocols"
+	"github.com/tylerxiao/longcom/repo/request"
+	"trpc.group/trpc-go/trpc-go/log"
 )
 
 // messageCallbackHandler 读消息callback处理
@@ -41,19 +39,18 @@ func disconnectCallbackHandler(ctx context.Context, c *ConnectionSession) error 
 }
 
 // callbackHandler 读消息处理
-func callbackHandler(ctx context.Context, c *ConnectionSession, dataType pb.CallbackDataType, data proto.Message) error {
+func callbackHandler(ctx context.Context, c *ConnectionSession, dataType pb.CallbackDataType, data interface{}) error {
 	// 不需要回调，直接返回
 	if c.Callback == "" {
 		return nil
 	}
 
-	protoAnyData, _ := anypb.New(data)
 	req := &pb.CallbackRequest{
 		AppName:  c.Business,
 		Topic:    c.Topic,
 		UserId:   c.Alias,
 		DataType: dataType,
-		Data:     protoAnyData,
+		Data:     data,
 	}
 
 	return callbackDo(ctx, c.Callback, req)
@@ -81,11 +78,11 @@ func callbackParseURL(fullURL string) (target, uri string, err error) {
 
 	scheme := u.Scheme
 	if u.Scheme == "http" || u.Scheme == "https" {
-		host := net.ParseIP(u.Host)
-		if host.String() != "" {
-			scheme = "dns"
-		} else {
+		host := net.ParseIP(u.Hostname())
+		if host != nil {
 			scheme = "ip"
+		} else {
+			scheme = "dns"
 		}
 	}
 

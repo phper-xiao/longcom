@@ -11,7 +11,7 @@ import (
     "github.com/tylerxiao/longcom/repo/merrors"
 	"github.com/panjf2000/ants/v2"
 	"github.com/pkg/errors"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 )
 
 // 按 business 区分 group

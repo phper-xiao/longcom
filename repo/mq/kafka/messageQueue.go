@@ -9,7 +9,7 @@ import (
 	"github.com/Shopify/sarama"
 	"github.com/pkg/errors"
 	"github.com/pquerna/ffjson/ffjson"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 )
 
 // SalmonPushByAliasTopicName push by alias topic name

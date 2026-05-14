@@ -2,7 +2,7 @@
 package merrors
 
 import (
-	"github.com/trpc-group/trpc-go/errs"
+	"trpc.group/trpc-go/trpc-go/errs"
 )
 
 var (

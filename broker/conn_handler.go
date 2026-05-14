@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
-	"github.com/trpc-group/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/log"
 	"github.com/tylerxiao/longcom/logic"
 	"github.com/tylerxiao/longcom/repo/merrors"
 )
